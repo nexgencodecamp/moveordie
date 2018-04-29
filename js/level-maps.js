@@ -2,8 +2,12 @@
  * This is where all the levels are placed. To add another one, simply create
  * a const called LEVEL_XXX where XXX is the number of the level eg. TWO, THREE...etc
  */
-const LEVEL_ONE = [
-    "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+
+const GAME_WIDTH = 1408;
+const GAME_HEIGHT = 800;
+
+ const LEVEL_ONE = [
+    "CWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWC",
     "W                                          W",
     "W                                          W",
     "W                                          W",
@@ -27,6 +31,6 @@ const LEVEL_ONE = [
     "W                                          W",
     "W                                          W",
     "W                                          W",
-    "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",   
+    "CFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC",   
 ];
 
