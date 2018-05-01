@@ -28,9 +28,6 @@ const GAME_HEIGHT = 800;
     "W                                          W",
     "W                 PPPPPPPPPPP              W",
     "W                                          W",
-    "W                                          W",
-    "W                                          W",
-    "W                                          W",
     "CFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC",   
 ];
 

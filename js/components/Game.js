@@ -19,13 +19,17 @@ Game.prototype.buildLevel = function (levelMap) {
                 console.log("Build Wall", j, i);
                 Crafty.e(SPRITE_WALLBLOCK).afterInit({ x: j*32, y: i*32 });
             }
-            if (levelBlock === SPRITE_CORNERBLOCK_CODE) {
+            else if (levelBlock === SPRITE_CORNERBLOCK_CODE) {
                 console.log("Build Wall Corner", j, i);
                 Crafty.e(SPRITE_CORNERBLOCK).afterInit({ x: j * 32, y: i * 32 });
             }
             else if (levelBlock === SPRITE_PLATFORMBLOCK_CODE) {
                 console.log("Build Platform");
                 Crafty.e(SPRITE_PLATFORMBLOCK).afterInit({ x: j * 32, y: i * 32 });
+            }
+            else if (levelBlock === SPRITE_FLOORBLOCK_CODE) {
+                console.log("Build Floor");
+                Crafty.e(SPRITE_FLOORBLOCK).afterInit({ x: j * 32, y: i * 32 });
             }
         }
     }

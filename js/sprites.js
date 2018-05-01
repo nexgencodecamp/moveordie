@@ -12,9 +12,16 @@ Crafty.sprite(32, 32, "js/components/cornerblock/img/darkStoneBlock.png", {
     SPRITE_CORNERBLOCK: [0, 0]
 });
 
-/*  Block */
+/*  Platfom Block */
 const SPRITE_PLATFORMBLOCK = "PlatformBlock";
 const SPRITE_PLATFORMBLOCK_CODE = 'P';
 Crafty.sprite(32, 32, "js/components/platformblock/img/platformBlock.png", {
     SPRITE_PLATFORMBLOCK: [0, 0]
+});
+
+/*  Floor Block */
+const SPRITE_FLOORBLOCK = "FloorBlock";
+const SPRITE_FLOORBLOCK_CODE = 'F';
+Crafty.sprite(32, 32, "js/components/floorblock/img/floorBlock.png", {
+    SPRITE_FLOORBLOCK: [0, 0]
 });
