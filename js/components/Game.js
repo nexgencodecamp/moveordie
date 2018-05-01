@@ -8,6 +8,9 @@ Game.prototype.init = function (w, h) {
     Crafty.background('#000000');
 
     this.buildLevel(this.__nextLevel);
+
+    // Add a progress bar per player. As we don't have a player yet, let's just see if we can get a progressbar working
+    this.addProgressBar();
 };
 
 Game.prototype.buildLevel = function (levelMap) {
@@ -34,5 +37,9 @@ Game.prototype.buildLevel = function (levelMap) {
         }
     }
 };
+
+Game.prototype.addProgressBar = function () {
+    Crafty.e(SPRITE_PROGRESSBAR).afterInit({ x: 100, y: 700 });
+}
 
 let __Game = new Game();

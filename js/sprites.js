@@ -25,3 +25,9 @@ const SPRITE_FLOORBLOCK_CODE = 'F';
 Crafty.sprite(32, 32, "js/components/floorblock/img/floorBlock.png", {
     SPRITE_FLOORBLOCK: [0, 0]
 });
+
+/*  Progress Bar */
+const SPRITE_PROGRESSBAR = "ProgressBar";
+Crafty.sprite(400, 100, "js/components/progressbar/img/progress.png", {
+    SPRITE_PROGRESSBAR: [0, 0]
+});
