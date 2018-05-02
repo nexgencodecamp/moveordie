@@ -31,3 +31,9 @@ const SPRITE_PROGRESSBAR = "ProgressBar";
 Crafty.sprite(400, 100, "js/components/progressbar/img/progress.png", {
     SPRITE_PROGRESSBAR: [0, 0]
 });
+
+/*  Player */
+const SPRITE_PLAYER = "Player";
+Crafty.sprite(32, 32, "js/components/player/img/player.png", {
+    SPRITE_PLAYER: [0, 0]
+});

@@ -26,26 +26,35 @@ Crafty.c("ProgressBar", {
     bindEvents: function (that) {
         // Bind to events here
         Crafty.bind('pbarStarted', function(){
-            console.log('ProgressBar started');
+            Crafty.log('ProgressBar started');
         })
-        Crafty.bind('pbarStopped', function () {
-            console.log('ProgressBar stopped');
+        Crafty.bind('pbarEmpty', function () {
+            Crafty.log('ProgressBar empty');
+            window.clearInterval(that.interval);
+        });
+        Crafty.bind('pbarFull', function () {
+            Crafty.log('ProgressBar full');
             window.clearInterval(that.interval);
         })
         Crafty.bind('pbarPaused', function () {
-            console.log('ProgressBar paused');
+            Crafty.log('ProgressBar paused');
         })
         Crafty.bind('pbarUnpaused', function () {
-            console.log('ProgressBar unpaused');
+            Crafty.log('ProgressBar unpaused');
+        });
+        Crafty.bind('pbarTickDown', function (data) {
+            Crafty.log('ProgressBar tickdown', data);
+        });
+        Crafty.bind('pbarTickUp', function (data) {
+            Crafty.log('ProgressBar tickup', data);
         });
     },
 
-    stop: function () {
+    reset: function () {
         window.clearInterval(this.interval);
-        this.progressAmt = this.PROGRESSBAR_WIDTH;        
-        this.pbarProgress.attr({ w: this.progressAmt });
+        this.pbarProgress.attr({ w: this.PROGRESSBAR_WIDTH });
 
-        Crafty.trigger('pbarStopped');
+        Crafty.trigger('pbarReset');
     },
 
     pause: function () {
@@ -61,13 +70,25 @@ Crafty.c("ProgressBar", {
         }
     },
 
-    start: function (progressAmt) {
-        this.progressAmt = progressAmt || this.PROGRESSBAR_WIDTH;
+    start: function (progressAmt, direction) {        
         var that = this;
+        this.progressAmt = progressAmt || this.PROGRESSBAR_WIDTH;
+        direction = direction || -1;        
         this.interval = window.setInterval(function () {
-            that.progressAmt -= 2;
+            if (direction > 0){
+                that.progressAmt += 2;
+                Crafty.trigger('pbarTickUp', Math.round((that.progressAmt/that.PROGRESSBAR_WIDTH) * 100));
+            }
+            else{
+                that.progressAmt -= 2;
+                Crafty.trigger('pbarTickDown', Math.round((that.progressAmt / that.PROGRESSBAR_WIDTH) * 100));
+            }
+            
             if (that.progressAmt <= 0){                
-                Crafty.trigger('pbarStopped');
+                Crafty.trigger('pbarEmpty');
+            }
+            else if(that.progressAmt >= 400){
+                Crafty.trigger('pbarFull');
             }
             that.pbarProgress.attr({ w: that.progressAmt });
         }, this.PROGRESSBAR_SPEED);
@@ -77,6 +98,6 @@ Crafty.c("ProgressBar", {
     },
 
     talk: function () {
-        console.log("ProgressBar ready!");
+        Crafty.log("ProgressBar ready!");
     }
 });
