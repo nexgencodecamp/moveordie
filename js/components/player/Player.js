@@ -6,6 +6,8 @@ Crafty.c("Player", {
         this.bindEvents(this);
         this.attr({ w: 32, h: 32 });
         this.gravity("FloorBlock");
+        this.progressBar = Crafty.e(SPRITE_PROGRESSBAR);
+        this.progressBar.afterInit({ x: 100, y: 700 });
     },
 
     afterInit: function (props) {

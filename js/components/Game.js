@@ -1,7 +1,8 @@
 class Game {
-    constructor() {
-        this.__nextLevel = LEVEL_ONE;
+    constructor(level) {
+        this.__nextLevel =level || LEVEL_ONE;
     }
+
     init(w, h) {
         Crafty.init(w || GAME_WIDTH, h || GAME_HEIGHT, document.getElementById('game'));
         //Crafty.background('#FFFFFF url(landscape.png) no-repeat center center');
@@ -11,10 +12,8 @@ class Game {
         // Add a Player
         let player = Crafty.e("Player");
         player.afterInit({x: 100, y: 600});
-        
-        // Add a progress bar per player. As we don't have a player yet, let's just see if we can get a progressbar working
-        let progressBar = this.addProgressBar();
     }
+    
     buildLevel(levelMap) {
         for (let i = 0; i < levelMap.length; i++) {
             let levelRow = levelMap[i].split("");
@@ -38,11 +37,6 @@ class Game {
                 }
             }
         }
-    }
-    addProgressBar() {
-        let pbar = Crafty.e(SPRITE_PROGRESSBAR);
-        pbar.afterInit({ x: 100, y: 700 });
-        return pbar;
     }
 }
 
