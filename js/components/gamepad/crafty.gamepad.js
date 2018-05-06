@@ -109,14 +109,14 @@
         // Key is index of gamepad.buttons[] array for specific key,
         // value is direction in degrees.
         _BUTTONS_DIRECTION: {
-            // 12: -90, // pad top
-            // 13: 90,  // pad bottom
-            // 14: 180, // pad left
-            // 15: 0    // pad right
             0: -90, // pad top
-            1: 90,  // pad bottom
-            2: 180, // pad left
-            3: 0    // pad right
+            //13: 90,  // pad bottom
+            14: 180, // pad left
+            15: 0    // pad right
+            //0: -90, // pad top
+            //1: 90,  // pad bottom
+            //2: 180, // pad left
+            //3: 0    // pad right
         },
 
         // Key is index of gamepad.axes[] and value is an array where first
@@ -134,26 +134,26 @@
             this.requires("Motion, Gamepad");
         },
 
-        _gamepadKeyChange: function (e) {
-            Crafty.log('_gamepadKeyChange:', e);
+        _gamepadKeyChange: function (e) {            
             if (this.disableControls) return;
             if (e.button in this._BUTTONS_DIRECTION) {
                 if (e.value === 1.0 && this._buttonsPressed.indexOf(e.button) === -1) {
                     this.vx = Math.round((this.vx + this._buttons[e.button].x) * 1000) / 1000;
                     this.vy = Math.round((this.vy + this._buttons[e.button].y) * 1000) / 1000;
-                    this._buttonsPressed.push(e.button);
-                } else if (e.value === 0.0 && this._buttonsPressed.indexOf(e.button) !== -1) {
-                    this.vx = Math.round((this.vx - this._buttons[e.button].x) * 1000) / 1000;
-                    this.vy = Math.round((this.vy - this._buttons[e.button].y) * 1000) / 1000;
-                    this._buttonsPressed.splice(this._buttonsPressed.indexOf(e.button), 1);
-                }
+                    //this._buttonsPressed.push(e.button);
+                } 
+                // else if (e.value === 0.0 && this._buttonsPressed.indexOf(e.button) !== -1) {
+                //     //this.vx = Math.round((this.vx - this._buttons[e.button].x) * 1000) / 1000;
+                //     //this.vy = Math.round((this.vy - this._buttons[e.button].y) * 1000) / 1000;
+                //     this._buttonsPressed.splice(this._buttonsPressed.indexOf(e.button), 1);
+                // }
             }
         },
 
-        _gamepadAxisChange: function (e) {
+        _gamepadAxisChange: function (e) {            
             if (this.disableControls) return;
             if (e.axis in this._AXES_DIRECTION) {
-                if (this._analogControl) {
+                if (this._analogControl) {                    
                     this._analogHandling(e);
                 } else {
                     this._digitalHandling(e);

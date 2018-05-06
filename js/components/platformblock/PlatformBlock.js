@@ -1,6 +1,6 @@
 // Create PlatformBlock Component
 Crafty.c("PlatformBlock", {
-    required: "2D, Canvas, Color, Collision, SPRITE_PLATFORMBLOCK",
+    required: "2D, Canvas, Color, Collision, Solid, Block, SPRITE_PLATFORMBLOCK",
     /* This function will be called when the component is added to an entity */
     init: function () {
         this.bindEvents(this);
