@@ -17,6 +17,7 @@ Crafty.c("Player", {
         this.isColliding = false;
         this.isJumping = false;
         this.canDoubleJump = true;
+        this.currentJumps = 0;
         //this.twoway(400, 300);
         this.collision();
         this.onHit(SPRITE_PLATFORMBLOCK, function (hitDatas) { // on collision with bullets            
@@ -35,7 +36,7 @@ Crafty.c("Player", {
 
     bindEvents: function (that) {
         that.bind('NewDirection', function (data) {
-            //Crafty.log('NewDirection:', data.x, data.y);
+            Crafty.log('NewDirection:', data.x, data.y);
             that.direction = data;
         });
 
@@ -61,10 +62,21 @@ Crafty.c("Player", {
         that.bind('LandedOnGround', function (ground) {
             that.isColliding = false;
             that.isJumping = false;
+            this.currentJumps = 0;
             
         });
         that.bind('GamepadKeyChange', function(e){
-            Crafty.log('GamepadKeyChange', e);
+            //Crafty.log('GamepadKeyChange', e);
+            if(e.pressed === false){
+                e.button = null;
+            }
+            else{
+                this.currentJumps++;
+                if(this.currentJumps > 2){
+                    e.button = null;                    
+                }
+                    
+            }            
         });
         that.bind('GamepadAxisChange', function (e) {
             if(e.axis === 1)
