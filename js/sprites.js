@@ -28,7 +28,7 @@ Crafty.sprite(32, 32, "js/components/floorblock/img/floorBlock.png", {
 
 /*  Progress Bar */
 const SPRITE_PROGRESSBAR = "ProgressBar";
-Crafty.sprite(400, 100, "js/components/progressbar/img/progress.png", {
+Crafty.sprite(198, 33, "js/components/progressbar/img/progress.png", {
     SPRITE_PROGRESSBAR: [0, 0]
 });
 

@@ -3,10 +3,11 @@ Crafty.c("ProgressBar", {
     required: "2D, Canvas, Color, SPRITE_PROGRESSBAR",
     /* This function will be called when the component is added to an entity */
     init: function () {
-        this.PROGRESSBAR_WIDTH = 400;
+        this.PROGRESSBAR_WIDTH = 198;
+        this.PROGRESSBAR_HEIGHT = 33;
         this.PROGRESSBAR_SPEED = 20;
         this.bindEvents(this);
-        this.attr({ w: 400, h: 100 });
+        this.attr({ w: this.PROGRESSBAR_WIDTH, h: this.PROGRESSBAR_HEIGHT });
         this.progressAmt = this.PROGRESSBAR_WIDTH;
         this.pbarProgress = null;
         this.interval = null;
@@ -19,13 +20,13 @@ Crafty.c("ProgressBar", {
 
         // Place inner image
         this.pbarProgress = Crafty.e("2D, DOM, Image").image("js/components/progressbar/img/progress-inner.png");
-        this.pbarProgress.attr({x: 111, y:720 });  
-        this.pbarProgress.attr({ w: this.progressAmt });      
+        this.pbarProgress.attr({ x: 111, y: 750 });
+        this.pbarProgress.attr({ w: this.progressAmt });
     },
 
     bindEvents: function (that) {
         // Bind to events here
-        Crafty.bind('pbarStarted', function(){
+        Crafty.bind('pbarStarted', function () {
             Crafty.log('ProgressBar started');
         })
         Crafty.bind('pbarEmpty', function () {
@@ -33,7 +34,7 @@ Crafty.c("ProgressBar", {
             window.clearInterval(that.interval);
         });
         Crafty.bind('pbarFull', function () {
-            Crafty.log('ProgressBar full');
+            //Crafty.log('ProgressBar full');
             window.clearInterval(that.interval);
         })
         Crafty.bind('pbarPaused', function () {
@@ -43,10 +44,10 @@ Crafty.c("ProgressBar", {
             Crafty.log('ProgressBar unpaused');
         });
         Crafty.bind('pbarTickDown', function (data) {
-            Crafty.log('ProgressBar tickdown', data);
+            //Crafty.log('ProgressBar tickdown', data);
         });
         Crafty.bind('pbarTickUp', function (data) {
-            Crafty.log('ProgressBar tickup', data);
+            //Crafty.log('ProgressBar tickup', data);
         });
     },
 
@@ -58,36 +59,38 @@ Crafty.c("ProgressBar", {
     },
 
     pause: function () {
-        if(this.isPaused){
-            this.start(this.progressAmt);
-            this.isPaused = false;
-            Crafty.trigger('pbarUnpaused');
-        }
-        else{
-            window.clearInterval(this.interval);
-            this.isPaused = true;
-            Crafty.trigger('pbarPaused');
-        }
+        window.clearInterval(this.interval);
+        this.isPaused = true;
+        Crafty.trigger('pbarPaused');
     },
 
-    start: function (progressAmt, direction) {        
-        var that = this;
-        this.progressAmt = progressAmt || this.PROGRESSBAR_WIDTH;
-        direction = direction || -1;        
+    unpause: function (direction) {
+        this.start(direction);
+        this.isPaused = false;
+        Crafty.trigger('pbarUnpaused');
+    },
+
+    start: function (direction) {
+        var that = this;        
+        direction = direction || -1;
+        // Don't start if progress is already at MAX
+        if (this.progressAmt >= this.PROGRESSBAR_WIDTH && direction === 1)
+            return;
+
         this.interval = window.setInterval(function () {
-            if (direction > 0){
+            if (direction > 0) {
                 that.progressAmt += 2;
-                Crafty.trigger('pbarTickUp', Math.round((that.progressAmt/that.PROGRESSBAR_WIDTH) * 100));
+                Crafty.trigger('pbarTickUp', Math.round((that.progressAmt / that.PROGRESSBAR_WIDTH) * 100));
             }
-            else{
+            else {
                 that.progressAmt -= 2;
                 Crafty.trigger('pbarTickDown', Math.round((that.progressAmt / that.PROGRESSBAR_WIDTH) * 100));
             }
-            
-            if (that.progressAmt <= 0){                
+
+            if (that.progressAmt <= 0) {
                 Crafty.trigger('pbarEmpty');
             }
-            else if(that.progressAmt >= 400){
+            else if (that.progressAmt >= that.PROGRESSBAR_WIDTH) {
                 Crafty.trigger('pbarFull');
             }
             that.pbarProgress.attr({ w: that.progressAmt });

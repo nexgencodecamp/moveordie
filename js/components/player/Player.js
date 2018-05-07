@@ -6,18 +6,20 @@ Crafty.c("Player", {
     init: function () {
         this.STATE_STILL = 0;
         this.STATE_MOVING = 1;
+        this.STATE_DEAD = 2;
+        this.STATE_FALLING = 3;
+        this.STATE_JUMPING = 4;
         this.bindEvents(this);
         this.attr({ w: 32, h: 32 });
         this.gravity("Block");
         this.gravityConst(700);
         this.progressBar = Crafty.e(SPRITE_PROGRESSBAR);
-        this.progressBar.afterInit({ x: 100, y: 700 });
+        this.progressBar.afterInit({ x: 100, y: 740 });
         this.state = this.STATE_STILL;
         this.direction = 0;
-        this.isColliding = false;
-        this.isJumping = false;
-        this.canDoubleJump = true;
+        this.isColliding = false;             
         this.currentJumps = 0;
+        this.isAlive = true;
         //this.twoway(400, 300);
         this.collision();
         this.onHit(SPRITE_PLATFORMBLOCK, function (hitDatas) { // on collision with bullets            
@@ -38,6 +40,26 @@ Crafty.c("Player", {
         that.bind('NewDirection', function (data) {
             Crafty.log('NewDirection:', data.x, data.y);
             that.direction = data;
+            if (!that.progressBar.isPaused) {
+                that.progressBar.pause();
+            }
+            if(data.x !== 0 && (data.y === 0 || data.y === -1)){                
+                that.progressBar.unpause(1);
+                this.state = this.STATE_MOVING;
+            }                    
+            else if (data.x === 0 && data.y === -1) {
+                that.progressBar.unpause(1);
+                this.state = this.STATE_JUMPING;
+            }                    
+            else if (data.x === 0 && data.y === 0) { 
+                that.progressBar.unpause(-1);            
+                this.state = this.STATE_STILL;
+            }
+            else if (data.x === 0 && data.y === 1) {
+                that.progressBar.unpause(-1);
+                this.state = this.STATE_FALLING;
+            }
+                
         });
 
         that.bind("UpdateFrame", function () {
@@ -60,11 +82,11 @@ Crafty.c("Player", {
         });
 
         that.bind('LandedOnGround', function (ground) {
-            that.isColliding = false;
-            that.isJumping = false;
+            that.isColliding = false;            
             this.currentJumps = 0;
             
         });
+        
         that.bind('GamepadKeyChange', function(e){
             //Crafty.log('GamepadKeyChange', e);
             if(e.pressed === false){
@@ -78,9 +100,15 @@ Crafty.c("Player", {
                     
             }            
         });
+        
         that.bind('GamepadAxisChange', function (e) {
             if(e.axis === 1)
                 e.axis = null;
+        });
+
+        that.bind('pbarEmpty', function () {
+            Crafty.log('You died...');
+            this.state = this.STATE_DEAD;
         });
     },
 
