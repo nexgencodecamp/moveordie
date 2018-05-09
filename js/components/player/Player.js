@@ -1,7 +1,6 @@
 // Create Player Component
 Crafty.c("Player", {
     required: "2D, Canvas, Color, SpriteAnimation, Collision, Gravity, GamepadMultiway, SPRITE_PLAYER",
-    //required: "2D, Canvas, Color, SpriteAnimation, Collision, Gravity, Twoway, SPRITE_PLAYER",
     /* This function will be called when the component is added to an entity */
     init: function () {
         this.STATE_STILL = 0;
@@ -13,32 +12,31 @@ Crafty.c("Player", {
         this.attr({ w: 32, h: 32 });
         this.gravity("Block");
         this.gravityConst(700);
-        this.progressBar = Crafty.e(SPRITE_PROGRESSBAR);
-        this.progressBar.afterInit({ x: 100, y: 740 });
         this.state = this.STATE_STILL;
         this.direction = 0;
         this.isColliding = false;             
         this.currentJumps = 0;
         this.isAlive = true;
-        //this.twoway(400, 300);
         this.collision();
         this.onHit(SPRITE_PLATFORMBLOCK, function (hitDatas) { // on collision with bullets            
             this.isColliding = true;            
         });
-        this.gamepadMultiway({
-            speed: 400, // Speed is in px/sec
-            gamepadIndex: 0
-        });    
+        // this.gamepadMultiway({
+        //     speed: 400, // Speed is in px/sec
+        //     gamepadIndex: 0
+        // });    
     },
 
     afterInit: function (props) {
-        this.x = props.x;
+        this.id = props.playerId;
+        this.x = props.x + (this.id * 150);
         this.y = props.y;
+        this.progressBar = Crafty.e(SPRITE_PROGRESSBAR);
+        this.progressBar.afterInit({ x: 100 + (this.id * 350), y: 740 });
     },
 
     bindEvents: function (that) {
-        that.bind('NewDirection', function (data) {
-            Crafty.log('NewDirection:', data.x, data.y);
+        that.bind('NewDirection', function (data) {            
             that.direction = data;
             if (!that.progressBar.isPaused) {
                 that.progressBar.pause();
@@ -83,12 +81,10 @@ Crafty.c("Player", {
 
         that.bind('LandedOnGround', function (ground) {
             that.isColliding = false;            
-            this.currentJumps = 0;
-            
+            this.currentJumps = 0;            
         });
-        
+
         that.bind('GamepadKeyChange', function(e){
-            //Crafty.log('GamepadKeyChange', e);
             if(e.pressed === false){
                 e.button = null;
             }
@@ -96,8 +92,7 @@ Crafty.c("Player", {
                 this.currentJumps++;
                 if(this.currentJumps > 2){
                     e.button = null;                    
-                }
-                    
+                }                    
             }            
         });
         
@@ -110,6 +105,13 @@ Crafty.c("Player", {
             Crafty.log('You died...');
             this.state = this.STATE_DEAD;
         });
+    },
+
+    setupGamePad: function (index) {
+        this.gamepadMultiway({
+            speed: 400, // Speed is in px/sec
+            gamepadIndex: index
+        }); 
     },
 
     talk: function () {
