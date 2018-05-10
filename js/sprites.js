@@ -32,8 +32,23 @@ Crafty.sprite(198, 33, "js/components/progressbar/img/progress.png", {
     SPRITE_PROGRESSBAR: [0, 0]
 });
 
-/*  Player */
-const SPRITE_PLAYER = "Player";
-Crafty.sprite(32, 32, "js/components/player/img/player.png", {
-    SPRITE_PLAYER: [0, 0]
+/*  Players */
+const SPRITE_PLAYER_1 = "Player1";
+Crafty.sprite(32, 32, "js/components/player/img/player-1.png", {
+    SPRITE_PLAYER_1: [0, 0]
+});
+
+const SPRITE_PLAYER_2 = "Player2";
+Crafty.sprite(32, 32, "js/components/player/img/player-2.png", {
+    SPRITE_PLAYER_2: [0, 0]
+});
+
+const SPRITE_PLAYER_3 = "Player3";
+Crafty.sprite(32, 32, "js/components/player/img/player-3.png", {
+    SPRITE_PLAYER_3: [0, 0]
+});
+
+const SPRITE_PLAYER_4 = "Player4";
+Crafty.sprite(32, 32, "js/components/player/img/player-4.png", {
+    SPRITE_PLAYER_4: [0, 0]
 });

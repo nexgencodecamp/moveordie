@@ -3,7 +3,8 @@ class Game {
         this.__nextLevel = level || LEVEL_ONE;
         this.players = [];
         this.controllers = {};
-        this.numGamePads = 0;
+        this.numGamePads = 0;   
+        this.isStarted = false;     
     }
 
     init(w, h) {
@@ -13,11 +14,13 @@ class Game {
         this.buildLevel(this.__nextLevel);
         this.createPlayers();
         this.bindEvents();
+
+        this.startGame();
     }
 
     createPlayers() {
-        for(let i=0; i < 2; i++){
-            let player = Crafty.e('Player');
+        for(let i=1; i < 3; i++){
+            let player = Crafty.e('Player, SPRITE_PLAYER_'+i);
             player.afterInit({ playerId: i, x: 100, y: 750 });
             this.players.push(player);
         }
@@ -26,56 +29,10 @@ class Game {
     bindEvents() {
         window.addEventListener("gamepadconnected", (e) => {
             let g = e.gamepad;
-            Crafty.log("Gamepad connected at index %d: %s. %d buttons, %d axes.", g.index, g.id, g.buttons.length, g.axes.length);
-            this.addgamepad(g);
+            Crafty.log("Gamepad connected at index %d: %s. %d buttons, %d axes.", g.index, g.id, g.buttons.length, g.axes.length);            
             this.numGamePads++;
             this.players[this.numGamePads-1].setupGamePad(g.index);             
         });
-
-        Crafty.bind('UpdateFrame', () => {
-            this.scangamepads();
-            for (let j in this.controllers) {
-                var controller = this.controllers[j];
-                for (var i = 0; i < controller.buttons.length; i++) {
-                    var val = controller.buttons[i];
-                    var pressed = val == 1.0;
-                    if (typeof (val) == "object") {
-                        pressed = val.pressed;
-                        val = val.value;
-                        if(pressed){
-                            Crafty.log('Controller:',controller.index, 'button:', i, 'pressed');
-                        }
-                    }
-                }
-
-                for (var i = 0; i < controller.axes.length; i++) {
-                    if (parseInt(controller.axes[0], 10) === -1){
-                        Crafty.log('Axes: -1');
-                    }
-                    if (parseInt(controller.axes[0], 10) === 1) {
-                        Crafty.log('Axes: 1');
-                    }
-                }
-            }
-
-        });
-    }
-
-    addgamepad(gamepad) {
-        this.controllers[gamepad.index] = gamepad;        
-    }
-
-    scangamepads() {
-        var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads() : []);
-        for (var i = 0; i < gamepads.length; i++) {
-            if (gamepads[i]) {
-                if (!(gamepads[i].index in this.controllers)) {
-                    this.addgamepad(gamepads[i]);
-                } else {
-                    this.controllers[gamepads[i].index] = gamepads[i];
-                }
-            }
-        }
     }
 
     buildLevel(levelMap) {
@@ -83,24 +40,40 @@ class Game {
             let levelRow = levelMap[i].split("");
             for (let j = 0; j < levelRow.length; j++) {
                 let levelBlock = levelRow[j];
-                if (levelBlock === SPRITE_WALLBLOCK_CODE) {
-                    //Crafty.log("Build Wall", j, i);
+                if (levelBlock === SPRITE_WALLBLOCK_CODE) {                    
                     Crafty.e(SPRITE_WALLBLOCK).afterInit({ x: j * 32, y: i * 32 });
                 }
-                else if (levelBlock === SPRITE_CORNERBLOCK_CODE) {
-                    //Crafty.log("Build Wall Corner", j, i);
+                else if (levelBlock === SPRITE_CORNERBLOCK_CODE) {                    
                     Crafty.e(SPRITE_CORNERBLOCK).afterInit({ x: j * 32, y: i * 32 });
                 }
-                else if (levelBlock === SPRITE_PLATFORMBLOCK_CODE) {
-                    //Crafty.log("Build Platform");
+                else if (levelBlock === SPRITE_PLATFORMBLOCK_CODE) {                    
                     Crafty.e(SPRITE_PLATFORMBLOCK).afterInit({ x: j * 32, y: i * 32 });
                 }
-                else if (levelBlock === SPRITE_FLOORBLOCK_CODE) {
-                    //Crafty.log("Build Floor");
+                else if (levelBlock === SPRITE_FLOORBLOCK_CODE) {                    
                     Crafty.e(SPRITE_FLOORBLOCK).afterInit({ x: j * 32, y: i * 32 });
                 }
             }
         }
+    }
+
+    startGame() {
+        let prestart = new Promise(function(resolve, reject){
+            (new Timer(3)).start();
+
+            Crafty.bind('timerFinished', function(data){
+                if(data.type === 'pretimer'){
+                    resolve();
+                }
+            })
+        });
+
+        prestart.then( response => {
+            (new Timer()).start();
+            this.isStarted = true;  
+            this.players.forEach(function(p){
+                p.progressBar.start();
+            });                      
+        });
     }
 }
 

@@ -19,8 +19,8 @@ Crafty.c("ProgressBar", {
         this.y = props.y;
 
         // Place inner image
-        this.pbarProgress = Crafty.e("2D, DOM, Image").image("js/components/progressbar/img/progress-inner.png");
-        this.pbarProgress.attr({ x: 111, y: 750 });
+        this.pbarProgress = Crafty.e("2D, DOM, Image").image(`js/components/progressbar/img/progress-inner-${props.index}.png`);
+        this.pbarProgress.attr({ x: this.x, y: 750 });
         this.pbarProgress.attr({ w: this.progressAmt });
     },
 
