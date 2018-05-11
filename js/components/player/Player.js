@@ -17,7 +17,7 @@ Crafty.c("Player", {
         this.isColliding = false;
         this.currentJumps = 0;
         this.isAlive = true;
-        this.collision();
+        this.collision();        
         this.onHit(SPRITE_PLATFORMBLOCK, function (hitDatas) { // on collision with bullets            
             this.isColliding = true;
         });
@@ -102,6 +102,8 @@ Crafty.c("Player", {
         that.bind('pbarEmpty', function () {
             Crafty.log('You died...');
             this.state = this.STATE_DEAD;
+            this.animate('PlayerDead', -1);
+            this.disableControls = true;
         });
     },
 

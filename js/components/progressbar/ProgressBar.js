@@ -28,7 +28,7 @@ Crafty.c("ProgressBar", {
         // Bind to events here
         Crafty.bind('pbarStarted', function () {
             Crafty.log('ProgressBar started');
-        })
+        });
         Crafty.bind('pbarEmpty', function () {
             Crafty.log('ProgressBar empty');
             window.clearInterval(that.interval);
@@ -36,10 +36,10 @@ Crafty.c("ProgressBar", {
         Crafty.bind('pbarFull', function () {
             //Crafty.log('ProgressBar full');
             window.clearInterval(that.interval);
-        })
+        });
         Crafty.bind('pbarPaused', function () {
             Crafty.log('ProgressBar paused');
-        })
+        });
         Crafty.bind('pbarUnpaused', function () {
             Crafty.log('ProgressBar unpaused');
         });

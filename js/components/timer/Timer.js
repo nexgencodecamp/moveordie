@@ -1,7 +1,14 @@
 class Timer {
-    constructor(timeLeft) {
+    constructor(timeLeft, type, xOffset, yOffset, displayFontSize) {
+        // Parameters
+        this.secondsTotal = timeLeft || 30;
+        this.type = type || 'main';
+        this.xOffset = xOffset || 150;
+        this.yOffset = yOffset || 50;
+        this.displayFontSize = displayFontSize || '28px';
+
+        // Time/counters
         this.gameStartTime = (new Date()).getTime();
-        this.secondsTotal = timeLeft || 120;
         this.timeLeft = this.secondsTotal;
         this.timeLeftDisplay = null;
     }
@@ -9,20 +16,24 @@ class Timer {
     start() {
         Crafty.bind('UpdateFrame', () => {
             if (this.timeLeft !== null && this.timeLeft <= 0) {
-                Crafty.trigger('timerFinished', {type: 'pretimer'});
-                this.stop();
+                Crafty.trigger('timerFinished', { type: this.type });
+                this.stop(this.type);
                 return;
-            }                
+            }
             else if (this.timeLeft > 0 && Crafty.frame() % 50 === 1) {
                 this.timeLeft = this.secondsTotal - Math.round(((new Date()).getTime() - this.gameStartTime) / 1000);
                 this.display();
             }
-        })
+        });
     }
 
-    stop() {
+    stop(type) {
         this.timeLeft = null;
-        this.timeLeftDisplay.destroy();        
+        this.timeLeftDisplay.destroy();
+
+        // Game Over event
+        if(type === 'main')
+            Crafty.trigger('timerFinished', {type: type});
     }
 
     display() {
@@ -30,9 +41,9 @@ class Timer {
             this.timeLeftDisplay.destroy();
         }
         this.timeLeftDisplay = Crafty.e("2D, Canvas, Text")
-            .attr({ x: GAME_WIDTH - 150, y: 50 })
+            .attr({ x: GAME_WIDTH - this.xOffset, y: this.yOffset })
             .text(this.timeLeft)
             .textColor('#FFFFFF')
-            .textFont({ size: '28px', weight: 'bold', family: 'Arial' });
+            .textFont({ size: this.displayFontSize, weight: 'bold', family: 'Arial' });
     }
 }
