@@ -21,6 +21,10 @@ Crafty.c("Player", {
         this.onHit(SPRITE_PLATFORMBLOCK, function (hitDatas) { // on collision with bullets            
             this.isColliding = true;
         });
+
+        // Load sounds
+        Crafty.audio.add("powerup", SND_POWERUP);
+        Crafty.audio.add("die", SND_DIE);
     },
 
     afterInit: function (props) {
@@ -29,6 +33,8 @@ Crafty.c("Player", {
         this.y = props.y;
         this.progressBar = Crafty.e(SPRITE_PROGRESSBAR);
         this.progressBar.afterInit({ index: this.id, x: 100 + ((this.id - 1) * 350), y: 740 });
+
+        Crafty.audio.play('powerup', 1, 0.1);
     },
 
     bindEvents: function (that) {
@@ -99,11 +105,15 @@ Crafty.c("Player", {
                 e.axis = null;
         });
 
-        that.bind('pbarEmpty', function () {
-            Crafty.log('You died...');
-            this.state = this.STATE_DEAD;
-            this.animate('PlayerDead', -1);
-            this.disableControls = true;
+        that.bind('pbarEmpty', function (data) {
+            // Check the player who died is this player
+            if(this.id === data.id){
+                Crafty.log(`Player ${data.id} died...!`);
+                this.state = this.STATE_DEAD;
+                Crafty.audio.play('die');
+                this.animate('PlayerDead', -1);
+                this.disableControls = true;
+            }
         });
     },
 

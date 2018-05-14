@@ -3,9 +3,6 @@
  * a const called LEVEL_XXX where XXX is the number of the level eg. TWO, THREE...etc
  */
 
-const GAME_WIDTH = 1408;
-const GAME_HEIGHT = 800;
-
  const LEVEL_ONE = [
     "CWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWC",
     "W                                          W",

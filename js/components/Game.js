@@ -20,7 +20,7 @@ class Game {
     }
 
     createPlayers() {
-        for (let i = 1; i < 3; i++) {
+        for (let i = 1; i < MAX_PLAYERS+1; i++) {
             let player = Crafty.e('Player, SPRITE_PLAYER_' + i);
             // Setup animation reel for a dead player.
             player.reel('PlayerDead', 1000, [[1, 0]]);
