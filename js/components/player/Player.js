@@ -18,9 +18,20 @@ Crafty.c("Player", {
         this.currentJumps = 0;
         this.isAlive = true;        
         this.collision();        
-        this.onHit(SPRITE_PLATFORMBLOCK, function (hitDatas) { // on collision with bullets            
+        this.onHit(SPRITE_PLATFORMBLOCK, function (hitDatas, isFirst) { // on collision with bullets            
             this.isColliding = true;
-            Crafty.log('isColliding = TRUE');
+            Crafty.log('isColliding = TRUE', isFirst, hitDatas);
+            if(isFirst){
+                // First collision with some entity
+                this.speed({ x: 0, y: 0 });
+                let hitData = hitDatas[0];
+                if (hitData.nx === 0){
+                    this.y += 2;
+                }
+                else if (hitData.nx !== 0) {
+                    this.x += 20 * hitData.nx;
+                }
+            }
         });
 
         // Load sounds
@@ -37,11 +48,11 @@ Crafty.c("Player", {
         this.multiway({x: 400}, props.keys);
         this.jumper(400, props.jumpKeys);
 
-        Crafty.audio.play('powerup', 1, 0.1);
+        Crafty.audio.play('powerup', 1, 0.1);        
     },
 
     bindEvents: function (that) {
-
+        
         that.bind('NewDirection', function (data) {
             if (__Game.isStarted === false)
                 return;
@@ -79,6 +90,9 @@ Crafty.c("Player", {
                 that.y = 33;
                 that.velocity().y = 0;
             }
+            if(that.checkHitsWithPlatforms(that)){
+                Crafty.log('Collided with platform!');
+            }
 
             if (this.isColliding) {
                 // If the platform is above the player do the following                
@@ -90,6 +104,11 @@ Crafty.c("Player", {
         that.bind('LandedOnGround', function (ground) {
             that.isColliding = false;
             this.currentJumps = 0;
+            if(this.vx === 0){
+                Crafty.log('Landed on Ground at zero speed');
+                this.speed({x:400});
+            }
+            
         });
 
         // that.bind('GamepadKeyChange', function (e) {
@@ -127,6 +146,12 @@ Crafty.c("Player", {
     //         gamepadIndex: index
     //     });
     // },
+
+    checkHitsWithPlatforms: function(self) {
+        if (self.x < 487 && self.y < 674 && self.y > 643){
+            return true;
+        }
+    },
 
     talk: function () {
         Crafty.log("Player ready!");

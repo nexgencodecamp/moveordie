@@ -77,13 +77,13 @@ Crafty.c("ProgressBar", {
     pause: function () {
         window.clearInterval(this.interval);
         this.isPaused = true;
-        Crafty.trigger('pbarPaused', { id: this.id });
+        //Crafty.trigger('pbarPaused', { id: this.id });
     },
 
     unpause: function (direction) {
         this.start(direction);
         this.isPaused = false;
-        Crafty.trigger('pbarUnpaused', { id: this.id });
+        //Crafty.trigger('pbarUnpaused', { id: this.id });
     },
 
     start: function (direction) {
