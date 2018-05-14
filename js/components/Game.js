@@ -24,7 +24,7 @@ class Game {
             let player = Crafty.e('Player, SPRITE_PLAYER_' + i);
             // Setup animation reel for a dead player.
             player.reel('PlayerDead', 1000, [[1, 0]]);
-            player.afterInit({ playerId: i, x: 100, y: 750 });
+            player.afterInit({ playerId: i, x: 100, y: 750, keys: KEYS[i-1], jumpKeys: JUMP_KEYS[i-1] });
             this.players.push(player);
         }
     }
