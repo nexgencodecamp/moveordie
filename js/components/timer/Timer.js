@@ -16,7 +16,7 @@ class Timer {
     start() {
         Crafty.bind('UpdateFrame', () => {
             if (this.timeLeft !== null && this.timeLeft <= 0) {
-                Crafty.trigger('timerFinished', { type: this.type });
+                //Crafty.trigger('timerFinished', { type: this.type });
                 this.stop(this.type);
                 return;
             }
@@ -33,7 +33,9 @@ class Timer {
 
         // Game Over event
         if(type === 'main')
-            Crafty.trigger('timerFinished', {type: type});
+            Crafty.trigger('mainTimerFinished', {type: type});
+        else if(type === 'pre')
+            Crafty.trigger('preTimerFinished', { type: type });
     }
 
     display() {

@@ -15,8 +15,7 @@ Crafty.c("Player", {
         this.state = this.STATE_STILL;
         this.direction = 0;
         this.isColliding = false;
-        this.currentJumps = 0;
-        this.isAlive = true;        
+        this.currentJumps = 0;              
         this.collision();        
         this.onHit(SPRITE_PLATFORMBLOCK, function (hitDatas, isFirst) { // on collision with bullets            
             this.isColliding = true;
@@ -53,9 +52,15 @@ Crafty.c("Player", {
 
     bindEvents: function (that) {
         
+        that.bind('GameStarted', () => {
+            that.disableControls = false;
+        });
+
         that.bind('NewDirection', function (data) {
-            if (__Game.isStarted === false)
+            if (!__Game.isStarted){
+                that.disableControls = true;
                 return;
+            }                
 
             that.direction = data;
             if (!that.progressBar.isPaused) {
@@ -79,7 +84,8 @@ Crafty.c("Player", {
             }
         });
 
-        that.bind("UpdateFrame", function () {
+        that.bind("UpdateFrame", function () {            
+            // Check for the screen boundaries so our player doesn't go offscreen
             if (that.x < 32)
                 that.x = 33;
             if (that.x > 1343)
@@ -89,9 +95,6 @@ Crafty.c("Player", {
             if (that.y < 33) {
                 that.y = 33;
                 that.velocity().y = 0;
-            }
-            if(that.checkHitsWithPlatforms(that)){
-                Crafty.log('Collided with platform!');
             }
 
             if (this.isColliding) {
@@ -111,23 +114,6 @@ Crafty.c("Player", {
             
         });
 
-        // that.bind('GamepadKeyChange', function (e) {
-        //     if (e.pressed === false) {
-        //         e.button = null;
-        //     }
-        //     else {
-        //         this.currentJumps++;
-        //         if (this.currentJumps > 2) {
-        //             e.button = null;
-        //         }
-        //     }
-        // });
-
-        // that.bind('GamepadAxisChange', function (e) {
-        //     if (e.axis === 1)
-        //         e.axis = null;
-        // });
-
         that.bind('pbarEmpty', function (data) {
             // Check the player who died is this player
             if(this.id === data.id){
@@ -138,19 +124,6 @@ Crafty.c("Player", {
                 this.disableControls = true;
             }
         });
-    },
-
-    // setupGamePad: function (index) {
-    //     this.gamepadMultiway({
-    //         speed: 400, // Speed is in px/sec
-    //         gamepadIndex: index
-    //     });
-    // },
-
-    checkHitsWithPlatforms: function(self) {
-        if (self.x < 487 && self.y < 674 && self.y > 643){
-            return true;
-        }
     },
 
     talk: function () {

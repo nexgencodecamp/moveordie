@@ -65,6 +65,10 @@ Crafty.c("ProgressBar", {
                 return;
             //Crafty.log('ProgressBar tickup', data);
         });
+        Crafty.bind('gameOver', () => {
+            // Stop progressbar
+            this.pause();
+        });
     },
 
     reset: function () {

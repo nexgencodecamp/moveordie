@@ -5,7 +5,9 @@ class Game {
         this.controllers = {};
         this.numGamePads = 0;
         this.isStarted = false;
+        this.isGameOver = false;
         this.gameOverDisplay = null;
+        this.winnerDisplay = null;
     }
 
     init(w, h) {
@@ -20,28 +22,38 @@ class Game {
     }
 
     createPlayers() {
-        for (let i = 1; i < MAX_PLAYERS+1; i++) {
+        for (let i = 1; i < MAX_PLAYERS + 1; i++) {
             let player = Crafty.e('Player, SPRITE_PLAYER_' + i);
             // Setup animation reel for a dead player.
             player.reel('PlayerDead', 1000, [[1, 0]]);
-            player.afterInit({ playerId: i, x: 100, y: 750, keys: KEYS[i-1], jumpKeys: JUMP_KEYS[i-1] });
+            player.afterInit({ playerId: i, x: 100, y: 750, keys: KEYS[i - 1], jumpKeys: JUMP_KEYS[i - 1] });
             this.players.push(player);
         }
     }
 
     bindEvents() {
-        window.addEventListener("gamepadconnected", (e) => {
-            let g = e.gamepad;
-            Crafty.log("Gamepad connected at index %d: %s. %d buttons, %d axes.", g.index, g.id, g.buttons.length, g.axes.length);
-            this.numGamePads++;
-            this.players[this.numGamePads - 1].setupGamePad(g.index);
-        });
-        Crafty.bind('timerFinished', data => {
-            if (data.type === 'main') {
+        Crafty.bind('UpdateFrame', () => {
+            if (this.isGameOver) {
                 this.displayGameOver();
+                return;
             }
         });
 
+        Crafty.bind('mainTimerFinished', data => {
+            this.isGameOver = true;
+            Crafty.trigger('gameOver');
+
+            // Display the winner
+            let winningPlayer = {player: null, score: -1};
+            this.players.map((p, idx) => {
+                if (p.progressBar.progressAmt > winningPlayer.score){
+                    winningPlayer.player = idx + 1;
+                    winningPlayer.score = p.progressBar.progressAmt;
+                }
+                Crafty.log('Progress for Player:', idx, p.progressBar.progressAmt);
+            });
+            this.displayWinner(winningPlayer);
+        });
     }
 
     buildLevel(levelMap) {
@@ -50,16 +62,16 @@ class Game {
             for (let j = 0; j < levelRow.length; j++) {
                 let levelBlock = levelRow[j];
                 if (levelBlock === SPRITE_WALLBLOCK_CODE) {
-                    Crafty.e(SPRITE_WALLBLOCK).afterInit({ x: j * 32, y: i * 32 });
+                    Crafty.e(SPRITE_WALLBLOCK).afterInit({ x: j * SPRITE_W, y: i * SPRITE_H });
                 }
                 else if (levelBlock === SPRITE_CORNERBLOCK_CODE) {
-                    Crafty.e(SPRITE_CORNERBLOCK).afterInit({ x: j * 32, y: i * 32 });
+                    Crafty.e(SPRITE_CORNERBLOCK).afterInit({ x: j * SPRITE_W, y: i * SPRITE_H });
                 }
                 else if (levelBlock === SPRITE_PLATFORMBLOCK_CODE) {
-                    Crafty.e(SPRITE_PLATFORMBLOCK).afterInit({ x: j * 32, y: i * 32 });
+                    Crafty.e(SPRITE_PLATFORMBLOCK).afterInit({ x: j * SPRITE_W, y: i * SPRITE_H });
                 }
                 else if (levelBlock === SPRITE_FLOORBLOCK_CODE) {
-                    Crafty.e(SPRITE_FLOORBLOCK).afterInit({ x: j * 32, y: i * 32 });
+                    Crafty.e(SPRITE_FLOORBLOCK).afterInit({ x: j * SPRITE_W, y: i * SPRITE_H });
                 }
             }
         }
@@ -67,10 +79,10 @@ class Game {
 
     startGame() {
         let prestart = new Promise(function (resolve, reject) {
-            (new Timer(6, 'pretimer', 700, 300, '96px')).start();
+            (new Timer(COUNTDOWN_SECS, 'pre', 700, 300, '96px')).start();
 
-            Crafty.bind('timerFinished', function (data) {
-                if (data.type === 'pretimer') {
+            Crafty.bind('preTimerFinished', function (data) {
+                if (data.type === 'pre') {
                     resolve();
                 }
             });
@@ -79,6 +91,7 @@ class Game {
         prestart.then(response => {
             (new Timer()).start();
             this.isStarted = true;
+            Crafty.trigger('GameStarted');
             this.players.forEach(function (p) {
                 p.progressBar.start();
             });
@@ -94,6 +107,16 @@ class Game {
             .text("GAME OVER")
             .textColor('#FFFFFF')
             .textFont({ size: '60px', weight: 'bold', family: 'Arial' });
+    }
+    displayWinner(pl) {
+        if (this.winnerDisplay) {
+            this.winnerDisplay.destroy();
+        }
+        this.winnerDisplay = Crafty.e("2D, Canvas, Text")
+            .attr({ x: GAME_WIDTH - 925, y: 400 })
+            .text(`PLAYER ${pl.player} WINS !!!`)
+            .textColor('#FFFF00')
+            .textFont({ size: '48px', weight: 'bold', family: 'Arial' });
     }
 }
 
