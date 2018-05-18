@@ -28,42 +28,34 @@ Crafty.c("ProgressBar", {
     bindEvents: function (that) {
         // Bind to events here
         Crafty.bind('pbarStarted', (data) => {
-            //Crafty.log('ProgressBar started');
             if (data.id !== this.id)
                 return;
         });
         Crafty.bind('pbarEmpty', (data) => {
             if (data.id !== this.id)
                 return;
-            Crafty.log('ProgressBar empty', data);
-            Crafty.log('Interval', window.interval);
             window.clearInterval(that.interval);
         });
         Crafty.bind('pbarFull', (data) => {
             if (data.id !== this.id)
-                return;
-            //Crafty.log('ProgressBar full');
+                return;            
             window.clearInterval(that.interval);
         });
         Crafty.bind('pbarPaused', (data) => {
             if (data.id !== this.id)
-                return;
-            Crafty.log('ProgressBar paused');
+                return;            
         });
         Crafty.bind('pbarUnpaused', (data) => {
             if (data.id !== this.id)
-                return;
-            Crafty.log('ProgressBar unpaused');
+                return;            
         });
         Crafty.bind('pbarTickDown', (data) => {
             if (data.id !== this.id)
-                return;
-            //Crafty.log('ProgressBar tickdown', data);
+                return;            
         });
         Crafty.bind('pbarTickUp', (data) => {
             if (data.id !== this.id)
-                return;
-            //Crafty.log('ProgressBar tickup', data);
+                return;            
         });
         Crafty.bind('gameOver', () => {
             // Stop progressbar
@@ -78,20 +70,17 @@ Crafty.c("ProgressBar", {
         Crafty.trigger('pbarReset', { id: this.id });
     },
 
-    pause: function () {
+    pause: function () {        
         window.clearInterval(this.interval);
-        this.isPaused = true;
-        //Crafty.trigger('pbarPaused', { id: this.id });
+        this.isPaused = true;        
     },
 
-    unpause: function (direction) {
+    unpause: function (direction) {        
         this.start(direction);
-        this.isPaused = false;
-        //Crafty.trigger('pbarUnpaused', { id: this.id });
+        this.isPaused = false;        
     },
 
     start: function (direction) {
-        //var that = this;
         direction = direction || -1;
         // Don't start if progress is already at MAX
         if (this.progressAmt >= this.PROGRESSBAR_WIDTH && direction === 1)
@@ -114,10 +103,17 @@ Crafty.c("ProgressBar", {
             else if (this.progressAmt >= this.PROGRESSBAR_WIDTH) {
                 Crafty.trigger('pbarFull', { id: this.id });
             }
+
+
             this.pbarProgress.attr({ w: this.progressAmt });
         }, this.PROGRESSBAR_SPEED);
 
         Crafty.trigger('pbarStarted', { id: this.id });
+    },
+
+    setProgressToNil: function(){
+        this.progressAmt = 0;
+        this.pbarProgress.attr({ w: this.progressAmt });
     },
 
     talk: function () {

@@ -15,23 +15,8 @@ Crafty.c("Player", {
         this.state = this.STATE_STILL;
         this.direction = 0;
         this.isColliding = false;
-        this.currentJumps = 0;              
-        this.collision();        
-        this.onHit(SPRITE_PLATFORMBLOCK, function (hitDatas, isFirst) { // on collision with bullets            
-            this.isColliding = true;
-            Crafty.log('isColliding = TRUE', isFirst, hitDatas);
-            if(isFirst){
-                // First collision with some entity
-                this.speed({ x: 0, y: 0 });
-                let hitData = hitDatas[0];
-                if (hitData.nx === 0){
-                    this.y += 2;
-                }
-                else if (hitData.nx !== 0) {
-                    this.x += 20 * hitData.nx;
-                }
-            }
-        });
+        this.currentJumps = 0;
+        this.collision();
 
         // Load sounds
         Crafty.audio.add("powerup", SND_POWERUP);
@@ -42,25 +27,40 @@ Crafty.c("Player", {
         this.id = props.playerId;
         this.x = props.x + (this.id * 150);
         this.y = props.y;
-        this.progressBar = Crafty.e(SPRITE_PROGRESSBAR);
+        this.progressBar = Crafty.e('ProgressBar');
         this.progressBar.afterInit({ index: this.id, x: 100 + ((this.id - 1) * 350), y: 740 });
-        this.multiway({x: 400}, props.keys);
+        this.multiway({ x: 400 }, props.keys);
         this.jumper(400, props.jumpKeys);
+        this.onHit('PlatformBlock', function (hitDatas, isFirst) { // on collision with bullets            
+            this.isColliding = true;
+            Crafty.log('isColliding = TRUE', isFirst, hitDatas);
+            if (isFirst) {
+                // First collision with some entity
+                this.speed({ x: 0, y: 0 });
+                let hitData = hitDatas[0];
+                if (hitData.nx === 0) {
+                    this.y += 2;
+                }
+                else if (hitData.nx !== 0) {
+                    this.x += 20 * hitData.nx;
+                }
+            }
+        });
 
-        Crafty.audio.play('powerup', 1, 0.1);        
+        Crafty.audio.play('powerup', 1, 0.1);
     },
 
     bindEvents: function (that) {
-        
+
         that.bind('GameStarted', () => {
             that.disableControls = false;
         });
 
         that.bind('NewDirection', function (data) {
-            if (!__Game.isStarted){
+            if (!__Game.isStarted) {
                 that.disableControls = true;
                 return;
-            }                
+            }
 
             that.direction = data;
             if (!that.progressBar.isPaused) {
@@ -84,7 +84,7 @@ Crafty.c("Player", {
             }
         });
 
-        that.bind("UpdateFrame", function () {            
+        that.bind("UpdateFrame", function () {
             // Check for the screen boundaries so our player doesn't go offscreen
             if (that.x < 32)
                 that.x = 33;
@@ -107,26 +107,33 @@ Crafty.c("Player", {
         that.bind('LandedOnGround', function (ground) {
             that.isColliding = false;
             this.currentJumps = 0;
-            if(this.vx === 0){
+            if (this.vx === 0) {
                 Crafty.log('Landed on Ground at zero speed');
-                this.speed({x:400});
+                this.speed({ x: 400 });
             }
-            
+
         });
 
         that.bind('pbarEmpty', function (data) {
             // Check the player who died is this player
-            if(this.id === data.id){
+            if (this.id === data.id) {
                 Crafty.log(`Player ${data.id} died...!`);
-                this.state = this.STATE_DEAD;
-                //Crafty.audio.play('die');
-                this.animate('PlayerDead', -1);
-                this.disableControls = true;
+                that.kill();
             }
         });
+    },
+
+    kill: function () {
+        this.state = this.STATE_DEAD;
+        this.animate('PlayerDead', -1);
+        this.disableControls = true;
+        this.vx = 0;
+        this.vy = 0;
+        Crafty.audio.play('die');
     },
 
     talk: function () {
         Crafty.log("Player ready!");
     }
 });
+

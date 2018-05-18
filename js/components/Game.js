@@ -31,6 +31,13 @@ class Game {
         }
     }
 
+    spawnBlocks(interval) {
+        Crafty.e("Delay").delay(function () {
+            var enemy = Crafty.e("FallingBlock");
+            enemy.afterInit({ x: Crafty.math.randomNumber(40, 1350), y: -34, speed: 100 });
+        }, 250, -1)
+    }
+
     bindEvents() {
         Crafty.bind('UpdateFrame', () => {
             if (this.isGameOver) {
@@ -44,15 +51,19 @@ class Game {
             Crafty.trigger('gameOver');
 
             // Display the winner
-            let winningPlayer = {player: null, score: -1};
+            let winningPlayer = { player: null, score: -1 };
             this.players.map((p, idx) => {
-                if (p.progressBar.progressAmt > winningPlayer.score){
+                if (p.progressBar.progressAmt > winningPlayer.score) {
                     winningPlayer.player = idx + 1;
                     winningPlayer.score = p.progressBar.progressAmt;
                 }
                 Crafty.log('Progress for Player:', idx, p.progressBar.progressAmt);
             });
             this.displayWinner(winningPlayer);
+        });
+
+        Crafty.bind('GameStarted', () => {
+            this.spawnBlocks();  // Wrap this inside of a Level object
         });
     }
 
@@ -62,16 +73,16 @@ class Game {
             for (let j = 0; j < levelRow.length; j++) {
                 let levelBlock = levelRow[j];
                 if (levelBlock === SPRITE_WALLBLOCK_CODE) {
-                    Crafty.e(SPRITE_WALLBLOCK).afterInit({ x: j * SPRITE_W, y: i * SPRITE_H });
+                    Crafty.e('WallBlock').afterInit({ x: j * SPRITE_W, y: i * SPRITE_H });
                 }
                 else if (levelBlock === SPRITE_CORNERBLOCK_CODE) {
-                    Crafty.e(SPRITE_CORNERBLOCK).afterInit({ x: j * SPRITE_W, y: i * SPRITE_H });
+                    Crafty.e('CornerBlock').afterInit({ x: j * SPRITE_W, y: i * SPRITE_H });
                 }
                 else if (levelBlock === SPRITE_PLATFORMBLOCK_CODE) {
-                    Crafty.e(SPRITE_PLATFORMBLOCK).afterInit({ x: j * SPRITE_W, y: i * SPRITE_H });
+                    Crafty.e('PlatformBlock').afterInit({ x: j * SPRITE_W, y: i * SPRITE_H });
                 }
                 else if (levelBlock === SPRITE_FLOORBLOCK_CODE) {
-                    Crafty.e(SPRITE_FLOORBLOCK).afterInit({ x: j * SPRITE_W, y: i * SPRITE_H });
+                    Crafty.e('FloorBlock').afterInit({ x: j * SPRITE_W, y: i * SPRITE_H });
                 }
             }
         }

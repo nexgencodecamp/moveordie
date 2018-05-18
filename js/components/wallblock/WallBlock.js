@@ -4,7 +4,7 @@ Crafty.c("WallBlock", {
   /* This function will be called when the component is added to an entity */
   init: function() {
     this.bindEvents(this);
-    this.attr({w: 32, h: 32});
+    this.attr({w: 32, h: 32, z: 10});
   },
 
   afterInit: function (props) {
