@@ -1,6 +1,6 @@
 // Create CornerBlock Component
 Crafty.c("CornerBlock", {
-    required: "2D, Canvas, Color, Collision, SPRITE_CORNERBLOCK",
+    required: "2D, Canvas, Color, Collision, sprite_cornerblock",
     /* This function will be called when the component is added to an entity */
     init: function () {
         this.bindEvents(this);

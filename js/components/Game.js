@@ -8,6 +8,7 @@ class Game {
         this.isGameOver = false;
         this.gameOverDisplay = null;
         this.winnerDisplay = null;
+        this.mainTimer = null;
     }
 
     init(w, h) {
@@ -41,8 +42,16 @@ class Game {
     bindEvents() {
         Crafty.bind('UpdateFrame', () => {
             if (this.isGameOver) {
-                this.displayGameOver();
+                this.displayGameOver();                
                 return;
+            }
+            let playersAlive = this.getPlayersAlive();
+            if (playersAlive.length === 1) {
+                // Game over by definition!
+                this.isGameOver = true;
+                Crafty.trigger('gameOver');
+                this.mainTimer.stop();
+                this.displayWinner({ player: playersAlive[0].id, score: playersAlive[0].progressBar.progressAmt });
             }
         });
 
@@ -100,13 +109,24 @@ class Game {
         });
 
         prestart.then(response => {
-            (new Timer()).start();
+            this.mainTimer = new Timer()
+            this.mainTimer.start();
             this.isStarted = true;
             Crafty.trigger('GameStarted');
             this.players.forEach(function (p) {
                 p.progressBar.start();
             });
         });
+    }
+
+    getPlayersAlive() {
+        let alive = [];
+        this.players.forEach((p) => {
+            if (p.state !== p.STATE_DEAD) {
+                alive.push(p);
+            }
+        });
+        return alive;
     }
 
     displayGameOver() {
@@ -119,6 +139,7 @@ class Game {
             .textColor('#FFFFFF')
             .textFont({ size: '60px', weight: 'bold', family: 'Arial' });
     }
+
     displayWinner(pl) {
         if (this.winnerDisplay) {
             this.winnerDisplay.destroy();
@@ -128,6 +149,10 @@ class Game {
             .text(`PLAYER ${pl.player} WINS !!!`)
             .textColor('#FFFF00')
             .textFont({ size: '48px', weight: 'bold', family: 'Arial' });
+    }
+
+    restartGame() {
+
     }
 }
 

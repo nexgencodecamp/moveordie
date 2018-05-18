@@ -29,6 +29,7 @@ Crafty.c("Player", {
         this.y = props.y;
         this.progressBar = Crafty.e('ProgressBar');
         this.progressBar.afterInit({ index: this.id, x: 100 + ((this.id - 1) * 350), y: 740 });
+        this.displayPlayerName();
         this.multiway({ x: 400 }, props.keys);
         this.jumper(400, props.jumpKeys);
         this.onHit('PlatformBlock', function (hitDatas, isFirst) { // on collision with bullets            
@@ -45,7 +46,7 @@ Crafty.c("Player", {
                     this.x += 20 * hitData.nx;
                 }
             }
-        });
+        });        
 
         Crafty.audio.play('powerup', 1, 0.1);
     },
@@ -124,6 +125,7 @@ Crafty.c("Player", {
     },
 
     kill: function () {
+        Crafty.log('Player:', this.id, 'killed !');
         this.state = this.STATE_DEAD;
         this.animate('PlayerDead', -1);
         this.disableControls = true;
@@ -131,6 +133,18 @@ Crafty.c("Player", {
         this.vy = 0;
         Crafty.audio.play('die');
     },
+
+    displayPlayerName: function() {
+        if (this.playerNameDisplay) {
+            this.playerNameDisplay.destroy();
+        }
+        this.playerNameDisplay = Crafty.e("2D, Canvas, Text")
+            .attr({ x: 105 + ((this.id-1) * 355), y: 775 })
+            .text(`PLAYER ${this.id}`)
+            .textColor('#FFFFFF')
+            .textFont({ size: '16px', weight: 'normal', family: 'Arial' });
+    },
+
 
     talk: function () {
         Crafty.log("Player ready!");

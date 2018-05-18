@@ -15,14 +15,14 @@ class Timer {
 
     start() {
         Crafty.bind('UpdateFrame', () => {
-            if (this.timeLeft !== null && this.timeLeft <= 0) {
-                //Crafty.trigger('timerFinished', { type: this.type });
+            if (this.timeLeft !== null && this.timeLeft <= 0) {                
                 this.stop(this.type);
                 return;
             }
             else if (this.timeLeft > 0 && Crafty.frame() % 50 === 1) {
                 this.timeLeft = this.secondsTotal - Math.round(((new Date()).getTime() - this.gameStartTime) / 1000);
                 this.display();
+                Crafty.log('Num players left:', __Game.getPlayersAlive().length);
             }
         });
     }
@@ -32,10 +32,10 @@ class Timer {
         this.timeLeftDisplay.destroy();
 
         // Game Over event
-        if(type === 'main')
-            Crafty.trigger('mainTimerFinished', {type: type});
+        if(type === 'main' || type === null || type === undefined)
+            Crafty.trigger('mainTimerFinished', {type: 'main'});
         else if(type === 'pre')
-            Crafty.trigger('preTimerFinished', { type: type });
+            Crafty.trigger('preTimerFinished', { type: 'pre' });
     }
 
     display() {
