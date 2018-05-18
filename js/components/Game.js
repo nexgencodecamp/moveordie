@@ -1,14 +1,6 @@
 class Game {
     constructor(level) {
-        this.__nextLevel = level || LEVEL_ONE;
-        this.players = [];
-        this.controllers = {};
-        this.numGamePads = 0;
-        this.isStarted = false;
-        this.isGameOver = false;
-        this.gameOverDisplay = null;
-        this.winnerDisplay = null;
-        this.mainTimer = null;
+        this.reset(level);
     }
 
     init(w, h) {
@@ -40,6 +32,13 @@ class Game {
     }
 
     bindEvents() {
+        Crafty.bind('KeyDown', (e) => {
+            if (this.isGameOver && e.key == Crafty.keys.S) {
+                this.restartGame();
+                return;
+            }
+        });
+
         Crafty.bind('UpdateFrame', () => {
             if (this.isGameOver) {
                 this.displayGameOver();                
@@ -66,7 +65,7 @@ class Game {
                     winningPlayer.player = idx + 1;
                     winningPlayer.score = p.progressBar.progressAmt;
                 }
-                Crafty.log('Progress for Player:', idx, p.progressBar.progressAmt);
+                //Crafty.log('Progress for Player:', idx, p.progressBar.progressAmt);
             });
             this.displayWinner(winningPlayer);
         });
@@ -144,15 +143,27 @@ class Game {
         if (this.winnerDisplay) {
             this.winnerDisplay.destroy();
         }
-        this.winnerDisplay = Crafty.e("2D, Canvas, Text")
+           this.winnerDisplay = Crafty.e("2D, Canvas, Text")
             .attr({ x: GAME_WIDTH - 925, y: 400 })
             .text(`PLAYER ${pl.player} WINS !!!`)
             .textColor('#FFFF00')
             .textFont({ size: '48px', weight: 'bold', family: 'Arial' });
     }
 
-    restartGame() {
+    reset(level){
+        Crafty('*').destroy();
+        this.__nextLevel = level || LEVEL_ONE;
+        this.players = [];
+        this.isStarted = false;
+        this.isGameOver = false;
+        this.gameOverDisplay = null;
+        this.winnerDisplay = null;
+        this.mainTimer = null;
+    }
 
+    restartGame(){
+        this.reset();
+        this.init();
     }
 }
 
