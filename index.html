@@ -4,16 +4,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Move or Die</title>
+
+	<style>
+		.wrapper {
+			width: 100%; height: auto;
+		}
+		.gamewrapper {
+			margin: 0 auto 0;
+		}
+		#game {
+			position: absolute;
+			top: 303px;
+		}	
+
+		#coverimg {
+			width: 100%;
+		    height: auto;
+		    position: absolute;
+		}
+
+	</style>
+
 </head>
 <body>
-    <h1>Move or Die</h1>
-    <div id="game"></div>
-
+	<div class="wrapper">
+	    	<img id="coverimg"  src="img/displaytitle.png" />	  
+	    	<div id="game" class="gamewrapper"></div>	
+	</div>
     <script src="js/crafty.js"></script>
     <script src="js/level-maps.js"></script>
     <script src="js/main.js"></script>
     <script>
-        init();
+		init();
     </script>
 </body>
 </html>
