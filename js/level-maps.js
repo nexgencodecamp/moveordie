@@ -1,6 +1,6 @@
 /**
  * This is where all the levels are placed. To add another one, simply create
- * a const called LEVEL_XXX where XXX is the number of the level eg. TWO, THREE...etc
+ * a const called LEVEL_XXX where XXX is the number of the level eg. LEVEL_TWO, LEVEL_THREE...etc
  */
 
  const LEVEL_ONE = [
