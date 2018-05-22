@@ -1,6 +1,6 @@
 // Create FallingBlock Component
 Crafty.c("FallingBlock", {
-    required: "2D, Canvas, Color, Collision, Gravity, SPRITE_FALLINGBLOCK",
+    required: "2D, Canvas, Color, Collision, Gravity, sprite_fallingblock",
     /* This function will be called when the component is added to an entity */
     init: function () {
         this.bindEvents(this);

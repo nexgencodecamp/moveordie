@@ -28,27 +28,3 @@
     "CFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC",   
 ];
 
-const LEVEL_TWO = [
-    "CWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWC",
-    "W                                          W",
-    "W                                          W",
-    "W                                          W",
-    "W                                          W",
-    "W                                          W",
-    "W                                          W",
-    "W                                          W",
-    "W    PPPPPPPP                  PPPPPPPP    W",
-    "W                                          W",
-    "W                                          W",
-    "W                                          W",
-    "W         PPPPPPP         PPPPPPP          W",
-    "W                                          W",
-    "W                                          W",
-    "W                 PPPPPPP                  W",
-    "W                                          W",
-    "W                                          W",
-    "W   PPPPPPPPPPP              PPPPPPPPPPP   W",
-    "W                                          W",
-    "W                                          W",
-    "CFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC",
-];

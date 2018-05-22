@@ -1,6 +1,6 @@
 // Create ProgressBar Component
 Crafty.c("ProgressBar", {
-    required: "2D, Canvas, Color, SPRITE_PROGRESSBAR",
+    required: "2D, Canvas, Color, sprite_progressbar",
     /* This function will be called when the component is added to an entity */
     init: function () {
         this.PROGRESSBAR_WIDTH = 198;

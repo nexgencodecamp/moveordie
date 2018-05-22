@@ -7,16 +7,16 @@ class Game {
         Crafty.init(w || GAME_WIDTH, h || GAME_HEIGHT, document.getElementById('game'));
         //Crafty.background('#FFFFFF url(landscape.png) no-repeat center center');
         Crafty.background('#000000');
-        this.buildLevel(lvl || this.__nextLevel);
-        this.createPlayers();
-        this.bindEvents();
+        //this.buildLevel(lvl || this.__nextLevel);
+        //this.createPlayers();
+        //this.bindEvents();
 
-        this.startGame();
+        //this.startGame();
     }
 
     createPlayers() {
         for (let i = 1; i < MAX_PLAYERS + 1; i++) {
-            let player = Crafty.e('Player, SPRITE_PLAYER_' + i);
+            let player = Crafty.e('Player, sprite_player_' + i);
             // Setup animation reel for a dead player.
             player.reel('PlayerDead', 1000, [[1, 0]]);
             player.afterInit({ playerId: i, x: 100, y: 750, keys: KEYS[i - 1], jumpKeys: JUMP_KEYS[i - 1] });
@@ -71,7 +71,7 @@ class Game {
         });
 
         Crafty.bind('GameStarted', () => {
-            this.spawnBlocks();  // Wrap this inside of a Level object
+            //this.spawnBlocks();  // Wrap this inside of a Level object
         });
     }
 

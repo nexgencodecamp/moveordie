@@ -1,6 +1,6 @@
 // Create FloorBlock Component
 Crafty.c("FloorBlock", {
-    required: "2D, Canvas, Color, Collision, Block, SPRITE_FLOORBLOCK",
+    required: "2D, Canvas, Color, Collision, Block, sprite_platformblock",
     /* This function will be called when the component is added to an entity */
     init: function () {
         this.bindEvents(this);

@@ -1,6 +1,6 @@
 // Create WallBlock Component
 Crafty.c("WallBlock", {
-  required: "2D, Canvas, Color, Solid, Collision, SPRITE_WALLBLOCK",
+  required: "2D, Canvas, Color, Solid, Collision, sprite_wallblock",
   /* This function will be called when the component is added to an entity */
   init: function() {
     this.bindEvents(this);
