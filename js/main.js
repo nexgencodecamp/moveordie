@@ -11,6 +11,6 @@ const COUNTDOWN_SECS = 6;
 const SPRITE_H = 32;
 const SPRITE_W = 32;
 
-/* If you don't pass the width and height of the game, it uses defaults */
+/* If you don't pass the width, height & level of the game, it uses defaults */
 __Game.init();
 

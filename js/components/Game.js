@@ -1,13 +1,13 @@
 class Game {
-    constructor(level) {
-        this.reset(level);
+    constructor() {
+        this.reset();
     }
 
-    init(w, h) {
+    init(lvl, w, h) {
         Crafty.init(w || GAME_WIDTH, h || GAME_HEIGHT, document.getElementById('game'));
         //Crafty.background('#FFFFFF url(landscape.png) no-repeat center center');
         Crafty.background('#000000');
-        this.buildLevel(this.__nextLevel);
+        this.buildLevel(lvl || this.__nextLevel);
         this.createPlayers();
         this.bindEvents();
 
@@ -150,9 +150,9 @@ class Game {
             .textFont({ size: '48px', weight: 'bold', family: 'Arial' });
     }
 
-    reset(level){
+    reset(){
         Crafty('*').destroy();
-        this.__nextLevel = level || LEVEL_ONE;
+        this.__nextLevel = LEVEL_ONE;
         this.players = [];
         this.isStarted = false;
         this.isGameOver = false;
