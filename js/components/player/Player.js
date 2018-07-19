@@ -48,7 +48,7 @@ Crafty.c("Player", {
             }
         });        
 
-        Crafty.audio.play('powerup', 1, 0.1);
+        //Crafty.audio.play('powerup', 1, 0.1);
     },
 
     bindEvents: function (that) {
@@ -59,7 +59,7 @@ Crafty.c("Player", {
 
         that.bind('NewDirection', function (data) {
             if (!__Game.isStarted) {
-                that.disableControls = true;
+                //that.disableControls = true;
                 return;
             }
 
@@ -131,7 +131,7 @@ Crafty.c("Player", {
         this.disableControls = true;
         this.vx = 0;
         this.vy = 0;
-        Crafty.audio.play('die');
+        //Crafty.audio.play('die');
     },
 
     displayPlayerName: function() {

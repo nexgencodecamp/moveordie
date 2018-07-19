@@ -10,7 +10,7 @@
     "W                                          W",
     "W                                          W",
     "W                                          W",
-    "W                  PPPPP                   W",
+    "W        PPPPPP    PPPPP PPPPP             W",
     "W                                          W",
     "W    PPPPPPPP                  PPPPPPPP    W",
     "W                                          W",

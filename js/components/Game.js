@@ -7,11 +7,11 @@ class Game {
         Crafty.init(w || GAME_WIDTH, h || GAME_HEIGHT, document.getElementById('game'));
         //Crafty.background('#FFFFFF url(landscape.png) no-repeat center center');
         Crafty.background('#000000');
-        //this.buildLevel(lvl || this.__nextLevel);
-        //this.createPlayers();
-        //this.bindEvents();
+        this.buildLevel(lvl || this.__nextLevel);
+        this.createPlayers();
+        this.bindEvents();
 
-        //this.startGame();
+        this.startGame();
     }
 
     createPlayers() {
@@ -71,7 +71,7 @@ class Game {
         });
 
         Crafty.bind('GameStarted', () => {
-            //this.spawnBlocks();  // Wrap this inside of a Level object
+            this.spawnBlocks();  // Wrap this inside of a Level object
         });
     }
 

@@ -15,7 +15,7 @@ Crafty.c("FallingBlock", {
 
         this.onHit('FloorBlock', function (hitDatas, isFirst) {
             Crafty.e('Explosion').play({ x: this.x - 20, y: this.y - 20 });
-            Crafty.audio.play("block-explode");
+            //Crafty.audio.play("block-explode");
             this.destroy();
         });
 
